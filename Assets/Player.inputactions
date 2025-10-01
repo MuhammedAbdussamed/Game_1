@@ -1,0 +1,126 @@
+{
+    "name": "Player",
+    "maps": [
+        {
+            "name": "Movement",
+            "id": "d64f4202-63a8-40d9-866e-f60c6e35cd30",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "68e19119-32fb-4216-8b68-5ae828eb2657",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "SpeedUp",
+                    "type": "Button",
+                    "id": "10e1acd8-5333-484d-b900-b74e7bf09c57",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "2D Vector",
+                    "id": "76b65af7-c5a8-4a05-bd70-65f6e1f809fa",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "49328616-f254-4271-b3a0-ee2dd905b22c",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "a616dc31-7069-4e07-9fde-e94a1af74351",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "d694c936-54fc-4cf8-b3bb-9f2970466897",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "f0fd5aa4-624d-4935-9174-6a59f5d09f5d",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "d0f9697c-264f-4357-b41a-964a137dfe9e",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpeedUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Camera",
+            "id": "e1a73cc5-9c87-4452-b285-b7e2285ff292",
+            "actions": [
+                {
+                    "name": "Aim",
+                    "type": "Button",
+                    "id": "3bc11676-84e2-4ac7-95ba-eeb3aca7cb65",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e14d62dd-aa3e-40f8-af19-ef926bbb0221",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
