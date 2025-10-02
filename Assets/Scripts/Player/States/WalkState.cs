@@ -59,6 +59,23 @@ public class WalkState : IState
         {                                                                                // Sola git
             movementState = MovementState.Left;                                          //
         }
+        /*----------------------------------------*/
+        else if (controller.moveDirection.y > 0f && controller.moveDirection.x > 0f)
+        {
+            movementState = MovementState.Forward_Right;
+        }
+        else if (controller.moveDirection.y > 0f && controller.moveDirection.x < 0f)
+        {
+            movementState = MovementState.Forward_Left;
+        }
+        else if (controller.moveDirection.y < 0f && controller.moveDirection.x > 0f)
+        {
+            movementState = MovementState.Backward_Right;
+        }
+        else if (controller.moveDirection.y < 0f && controller.moveDirection.x < 0f)
+        {
+            movementState = MovementState.Backward_Left;
+        }
     }
 
     #endregion
@@ -67,10 +84,14 @@ public class WalkState : IState
 
     void ResetAnimations(PlayerController controller)
     {
-        controller.player.animator.SetBool("WalkForward", false);
-        controller.player.animator.SetBool("WalkBackward", false);
-        controller.player.animator.SetBool("WalkRight", false);
-        controller.player.animator.SetBool("WalkLeft", false);
+        controller.player.animator.SetBool("Forward", false);
+        controller.player.animator.SetBool("Backward", false);
+        controller.player.animator.SetBool("Right", false);
+        controller.player.animator.SetBool("Left", false);
+        controller.player.animator.SetBool("Forward_Right", false);
+        controller.player.animator.SetBool("Forward_Left", false);
+        controller.player.animator.SetBool("Backward_Right", false);
+        controller.player.animator.SetBool("Backward_Left", false);
     }
     
     void WalkAnimations(PlayerController controller)
@@ -80,19 +101,35 @@ public class WalkState : IState
         switch (movementState)
         {
             case MovementState.Forward:
-                controller.player.animator.SetBool("WalkForward", true);
+                controller.player.animator.SetBool("Forward", true);
                 break;
 
             case MovementState.Backward:
-                controller.player.animator.SetBool("WalkBackward", true);
+                controller.player.animator.SetBool("Backward", true);
                 break;
 
             case MovementState.Right:
-                controller.player.animator.SetBool("WalkRight", true);
+                controller.player.animator.SetBool("Right", true);
                 break;
 
             case MovementState.Left:
-                controller.player.animator.SetBool("WalkLeft", true);
+                controller.player.animator.SetBool("Left", true);
+                break;
+
+            case MovementState.Forward_Right:
+                controller.player.animator.SetBool("Forward_Right", true);
+                break;
+
+            case MovementState.Forward_Left:
+                controller.player.animator.SetBool("Forward_Left", true);
+                break;
+
+            case MovementState.Backward_Right:
+                controller.player.animator.SetBool("Backward_Right", true);
+                break;
+
+            case MovementState.Backward_Left:
+                controller.player.animator.SetBool("Backward_Left", true);
                 break;
         }
     }

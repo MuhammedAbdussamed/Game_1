@@ -5,7 +5,8 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Input References")]
     [SerializeField] private InputActionAsset playerActionMap;
-    private InputActionMap movementActionMap;
+    internal InputActionMap movementActionMap;
+    internal InputActionMap CamActionMap;
 
     // Script reference
     internal PlayerProperties player;
@@ -13,15 +14,21 @@ public class PlayerController : MonoBehaviour
     // Movement Variables        
     internal Vector2 moveDirection;
 
-    // Movement bools
+    // State bools
     internal bool isRunning;
+    internal bool isFalling;
+
+    // Movement bools
     internal bool isSpeedUp;
+    internal bool isJumpPressed;
+    internal bool isJumping;
 
     void Start()
     {
         player = PlayerProperties.Instance;
         playerActionMap.Enable();
         movementActionMap = playerActionMap.FindActionMap("Movement");
+        CamActionMap = playerActionMap.FindActionMap("Camera");
     }
 
     void Update()
@@ -32,12 +39,11 @@ public class PlayerController : MonoBehaviour
 
         // Functions
         SpeedUp();
+        Jump();
         player.currentState.Update(this);
 
         // Transition
         SwitchRunState();
-
-        Debug.Log(moveDirection);
     }
 
     #region Assign
@@ -46,11 +52,21 @@ public class PlayerController : MonoBehaviour
     {
         moveDirection = movementActionMap.FindAction("Move").ReadValue<Vector2>();
         isSpeedUp = movementActionMap.FindAction("SpeedUp").IsPressed();
+        isJumpPressed = movementActionMap.FindAction("Jump").IsPressed();
     }
 
     void AnimatorAssigns()
     {
         player.animator.SetFloat("Speed", player.Speed);
+
+        if (player.rb.linearVelocity.y > 0f)
+        {
+            player.animator.SetBool("Jump", true);
+        }
+        else
+        {
+            player.animator.SetBool("Jump", false);
+        }
     }
 
     #endregion
@@ -66,6 +82,23 @@ public class PlayerController : MonoBehaviour
         else
         {
             player.Speed -= 9f * Time.deltaTime;
+        }
+    }
+
+    void Jump()
+    {
+        if (player.onGround && isJumpPressed)
+        {
+            Vector3 v = player.rb.linearVelocity;
+            v.y = 0f;
+            player.rb.linearVelocity = v;
+
+            player.rb.AddForce(Vector3.up * player.JumpPower);
+        }
+
+        if (player.rb.linearVelocity.y < 0f)
+        {
+            isFalling = true;
         }
     }
 

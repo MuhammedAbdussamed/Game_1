@@ -5,9 +5,17 @@ public class PlayerProperties : MonoBehaviour
 {
     public static PlayerProperties Instance { get; private set; }   // Bu scripti heryerden erişilir yap.
 
-    [Header("Properties")]
+    [Header("Movement Properties")]
     public float Speed;
     public float JumpPower;
+
+    [Header("Properties")]
+    public float Health;
+    public float Energy;
+    public float FallSpeed;
+
+    // Movement Bools
+    internal bool onGround;
 
     // Components
     internal Rigidbody rb;
