@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,12 +25,16 @@ public class PlayerController : MonoBehaviour
     internal bool isJumpPressed;
     internal bool isJumping;
 
-    void Start()
+    async Task Start()
     {
         player = PlayerProperties.Instance;
-        playerActionMap.Enable();
+
         movementActionMap = playerActionMap.FindActionMap("Movement");
         CamActionMap = playerActionMap.FindActionMap("Camera");
+
+        await Task.Delay(3000); // 3 saniye bekle
+
+        playerActionMap.Enable();
     }
 
     void Update()

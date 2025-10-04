@@ -54,7 +54,7 @@ public class PlayerProperties : MonoBehaviour
 
     void Clamps()
     {
-        Speed = Mathf.Clamp(Speed, 3f, 8f);
+        Speed = Mathf.Clamp(Speed, 3f, 10f);
         Energy = Mathf.Clamp(Energy, 0f, 100f);
     }
 

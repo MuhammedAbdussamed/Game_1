@@ -39,8 +39,8 @@ public class WalkState : IState
         move = controller.transform.TransformDirection(move);                           // Karakter etrafinda dönse bile ön yüzü hep Z değeri kalacak.
 
         Vector3 velocity = controller.player.rb.linearVelocity;
-        velocity.x = move.x;
-        velocity.z = move.z;
+        velocity.x = move.x * controller.player.Speed;
+        velocity.z = move.z * controller.player.Speed;
 
         controller.player.rb.linearVelocity = velocity;
     }
