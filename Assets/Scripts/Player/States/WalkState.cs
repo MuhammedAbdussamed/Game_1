@@ -1,9 +1,11 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class WalkState : IState
 {
     MovementState movementState;                // Karakterin hangi yöne gideceğini belirten enum değişkeni.
+    
 
     public void Enter(PlayerController controller)
     {
@@ -32,11 +34,15 @@ public class WalkState : IState
 
     void Walk(PlayerController controller)
     {
-        Vector3 move = new Vector3(controller.moveDirection.x, controller.player.rb.linearVelocity.y, controller.moveDirection.y);
+        Vector3 move = new Vector3(controller.moveDirection.x, 0f, controller.moveDirection.y);
 
-        move = controller.transform.TransformDirection(move);
+        move = controller.transform.TransformDirection(move);                           // Karakter etrafinda dönse bile ön yüzü hep Z değeri kalacak.
 
-        controller.player.rb.linearVelocity = move * controller.player.Speed;
+        Vector3 velocity = controller.player.rb.linearVelocity;
+        velocity.x = move.x;
+        velocity.z = move.z;
+
+        controller.player.rb.linearVelocity = velocity;
     }
 
     /*-----------------------------------------------------------------------------------*/

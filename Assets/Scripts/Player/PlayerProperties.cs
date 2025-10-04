@@ -7,7 +7,7 @@ public class PlayerProperties : MonoBehaviour
 
     [Header("Movement Properties")]
     public float Speed;
-    public float JumpPower;
+    public float JumpHeight;
 
     [Header("Properties")]
     public float Health;
@@ -49,7 +49,13 @@ public class PlayerProperties : MonoBehaviour
 
     void Update()
     {
+        Clamps();
+    }
+
+    void Clamps()
+    {
         Speed = Mathf.Clamp(Speed, 3f, 8f);
+        Energy = Mathf.Clamp(Energy, 0f, 100f);
     }
 
 }

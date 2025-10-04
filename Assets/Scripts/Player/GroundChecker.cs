@@ -1,14 +1,15 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class GroundChecker : MonoBehaviour
 {
-    [Header("RaycastLayers")]
-    [SerializeField] private LayerMask raycastLayers;
+    // Layer Mask & Transform
+    [SerializeField] private LayerMask ignoringLayers;
     [SerializeField] private Transform spine;
+    [SerializeField] private float distance;
     
-
     // Script Reference
     private PlayerProperties player;
 
@@ -23,8 +24,6 @@ public class GroundChecker : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(player.onGround);
-
         ray = new Ray(transform.position, Vector3.down);
 
         ClampPosition();
@@ -37,15 +36,15 @@ public class GroundChecker : MonoBehaviour
 
     void GroundCheck()
     {
-        if (Physics.Raycast(ray, out hit, 1.1f, ~raycastLayers))
+        if (Physics.Raycast(ray, out hit, distance, ~ignoringLayers))
         {
             player.onGround = true;
-            Debug.DrawRay(transform.position, Vector3.down, Color.green, 1.1f);
+            Debug.DrawRay(transform.position, Vector3.down, Color.green, distance);
         }
         else
         {
             player.onGround = false;
-            Debug.DrawRay(transform.position, Vector3.down, Color.red, 1.1f);
+            Debug.DrawRay(transform.position, Vector3.down, Color.red, distance);
         }
     }
 
