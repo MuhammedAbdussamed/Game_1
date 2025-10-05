@@ -5,9 +5,10 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("Input References")]
-    [SerializeField] private InputActionAsset playerActionMap;
+    [SerializeField] internal InputActionAsset playerActionMap;
     internal InputActionMap movementActionMap;
     internal InputActionMap CamActionMap;
+    internal InputActionMap socialActionMap;
 
     // Script reference
     internal PlayerProperties player;
@@ -22,8 +23,9 @@ public class PlayerController : MonoBehaviour
 
     // Movement bools
     internal bool isSpeedUp;
-    internal bool isJumpPressed;
     internal bool isJumping;
+    internal bool isJumpPressed;
+    internal bool isInteractPressed;
 
     async Task Start()
     {
@@ -31,6 +33,7 @@ public class PlayerController : MonoBehaviour
 
         movementActionMap = playerActionMap.FindActionMap("Movement");
         CamActionMap = playerActionMap.FindActionMap("Camera");
+        socialActionMap = playerActionMap.FindActionMap("Social");
 
         await Task.Delay(3000); // 3 saniye bekle
 
@@ -51,8 +54,6 @@ public class PlayerController : MonoBehaviour
 
         // Transition
         SwitchRunState();
-
-        Debug.Log(transform.position);
     }
 
     #region Assign
@@ -62,6 +63,7 @@ public class PlayerController : MonoBehaviour
         moveDirection = movementActionMap.FindAction("Move").ReadValue<Vector2>();
         isSpeedUp = movementActionMap.FindAction("SpeedUp").IsPressed();
         isJumpPressed = movementActionMap.FindAction("Jump").WasPressedThisFrame();
+        isInteractPressed = socialActionMap.FindAction("Interact").WasPressedThisFrame();
     }
 
     /*--------------------------------------------------------------------------*/

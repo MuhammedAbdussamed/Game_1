@@ -8,6 +8,8 @@ public class PlayerProperties : MonoBehaviour
     [Header("Movement Properties")]
     public float Speed;
     public float JumpHeight;
+    internal float minSpeed;
+    internal float maxSpeed;
 
     [Header("Properties")]
     public float Health;
@@ -16,6 +18,7 @@ public class PlayerProperties : MonoBehaviour
 
     // Movement Bools
     internal bool onGround;
+    internal bool isInteracting;
 
     // Components
     internal Rigidbody rb;
@@ -45,6 +48,10 @@ public class PlayerProperties : MonoBehaviour
         // Components Assign
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+
+        // Values Assign
+        minSpeed = 3f;
+        maxSpeed = 10f;
     }
 
     void Update()
@@ -52,9 +59,9 @@ public class PlayerProperties : MonoBehaviour
         Clamps();
     }
 
-    void Clamps()
+    public void Clamps()
     {
-        Speed = Mathf.Clamp(Speed, 3f, 10f);
+        Speed = Mathf.Clamp(Speed, minSpeed, maxSpeed);
         Energy = Mathf.Clamp(Energy, 0f, 100f);
     }
 
