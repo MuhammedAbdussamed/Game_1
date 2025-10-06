@@ -8,10 +8,12 @@ public class GroundChecker : MonoBehaviour
     // Layer Mask & Transform
     [SerializeField] private LayerMask ignoringLayers;
     [SerializeField] private Transform spine;
-    [SerializeField] private float distance;
-    
+
     // Script Reference
-    private PlayerProperties player;
+    private GameManager gameManager;
+
+    // Ground Material
+    internal GroundMaterial groundMaterial;
 
     // Raycast Variables
     private RaycastHit hit;
@@ -19,7 +21,7 @@ public class GroundChecker : MonoBehaviour
 
     void Start()
     {
-        player = PlayerProperties.Instance;
+        gameManager = GameManager.Instance;
     }
 
     void Update()
@@ -36,21 +38,46 @@ public class GroundChecker : MonoBehaviour
 
     void GroundCheck()
     {
-        if (Physics.Raycast(ray, out hit, distance, ~ignoringLayers))
+        if (Physics.Raycast(ray, out hit, 1.8f, ~ignoringLayers))
         {
-            player.onGround = true;
-            Debug.DrawRay(transform.position, Vector3.down, Color.green, distance);
+            gameManager.player.onGround = true;
+            Debug.DrawRay(transform.position, Vector3.down, Color.green, 1.8f);
+            CheckGroundMaterial(hit);
         }
         else
         {
-            player.onGround = false;
-            Debug.DrawRay(transform.position, Vector3.down, Color.red, distance);
+            gameManager.player.onGround = false;
+            Debug.DrawRay(transform.position, Vector3.down, Color.red, 1.8f);
         }
     }
 
     void ClampPosition()
     {
         transform.position = spine.position;
+    }
+
+    void CheckGroundMaterial(RaycastHit hit)
+    {
+        if (hit.collider.CompareTag("MetalGround"))
+        {
+            groundMaterial = GroundMaterial.Metal;
+        }
+        else if (hit.collider.CompareTag("Grass"))
+        {
+            groundMaterial = GroundMaterial.Grass;
+        }
+        else if (hit.collider.CompareTag("Gravel"))
+        {
+            groundMaterial = GroundMaterial.Gravel;
+        }
+
+    }
+
+    public enum GroundMaterial
+    {
+        Grass,
+        Metal,
+        Gravel
     }
     
 }

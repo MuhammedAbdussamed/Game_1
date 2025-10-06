@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 
     // Script reference
     internal PlayerProperties player;
+    internal GameManager gameManager;
 
     // Movement Variables        
     internal Vector2 moveDirection;
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour
     async Task Start()
     {
         player = PlayerProperties.Instance;
+        gameManager = GameManager.Instance;
 
         movementActionMap = playerActionMap.FindActionMap("Movement");
         CamActionMap = playerActionMap.FindActionMap("Camera");
@@ -47,9 +49,10 @@ public class PlayerController : MonoBehaviour
         AnimatorAssigns();
 
         // Functions
-        SpeedUp();
         Jump();
+        SpeedUp();
         EnergyReset();
+        Interaction();
         player.currentState.Update(this);
 
         // Transition
@@ -156,6 +159,20 @@ public class PlayerController : MonoBehaviour
                 player.Energy += 12.5f * Time.deltaTime;
             }
 
+        }
+    }
+
+    /*--------------------------------------------*/
+
+    void Interaction()
+    {
+        if (player.isInteracting)
+        {
+            movementActionMap.Disable();
+        }
+        else
+        {
+            movementActionMap.Enable();
         }
     }
 

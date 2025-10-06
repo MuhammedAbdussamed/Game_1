@@ -4,11 +4,15 @@ using UnityEngine.SceneManagement;
 public class Portal : MonoBehaviour
 {
     // Script
-    [SerializeField] private General_Script generalScript;
-    [SerializeField] private PlayerController controller;
+    private GameManager gameManager;
 
     // Movement Bools
     internal bool isCharacterIn;
+
+    void Start()
+    {
+        gameManager = GameManager.Instance;
+    }
 
     void Update()
     {
@@ -17,25 +21,39 @@ public class Portal : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
-        if (col.CompareTag("Player"))
-        {
-            isCharacterIn = true;
-        }
+        DetectPlayer(col, true);
+        MissionCompleted();
     }
 
     void OnTriggerExit(Collider col)
     {
-        if (col.CompareTag("Player"))
+        DetectPlayer(col, false);
+    }
+
+    void MissionCompleted()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 1)
         {
-            isCharacterIn = false;
+            if (gameManager.taskScript.currentTaskIndex == 0 && gameManager.taskScript.duringMission)
+            {
+                gameManager.taskScript.isPortalFound = true;
+            }
         }
     }
 
     void Teleport()
     {
-        if (isCharacterIn && generalScript.firstMeeting && controller.isInteractPressed)
+        if (isCharacterIn && !gameManager.generalScript.firstMeeting && gameManager.controller.isInteractPressed)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+    }
+
+    void DetectPlayer(Collider col, bool isIn)
+    {
+        if (col.CompareTag("Player"))
+        {
+            isCharacterIn = isIn;
         }
     }
 }

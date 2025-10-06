@@ -6,22 +6,31 @@ using UnityEngine;
 public class General_Script : MonoBehaviour
 {
     // Animation Assign
-    [SerializeField] private Animator animator;
-    private bool interact;
-
+    private Animator animator;
+    
     // UI Elements
     [SerializeField] private Canvas talkCanvas;
     [SerializeField] private TextMeshProUGUI dialogue;
 
     // Movement Bools
-    private bool isNearPlayer;
+    internal bool isNearPlayer;
+    internal bool firstMeeting = true;
+
+    // States
+    internal bool interacting;
 
     // Scripts
-    [SerializeField] private PlayerController controller;
+    private GameManager gameManager;
 
     // Dialogue bools
-    [SerializeField] private List<String> dialogues = new List<String>();
-    internal bool firstMeeting;
+    [SerializeField] internal List<String> dialogues = new List<String>();
+    
+
+    void Start()
+    {
+        gameManager = GameManager.Instance;
+        animator = GetComponent<Animator>();
+    }
 
     void Update()
     {
@@ -29,27 +38,17 @@ public class General_Script : MonoBehaviour
         AnimatorAssign();
     }
 
-    void OnTriggerEnter(Collider col)
-    {
-        DetectPlayer(col);
-    }
+    void OnTriggerEnter(Collider col){ DetectPlayer(col, true); }   // Karakterin collidera girmesi
 
-    void OnTriggerExit(Collider col)
-    {
-        if (col.CompareTag("Player"))
-        {
-            isNearPlayer = false;
-            interact = false;
-        }
-    }
+    void OnTriggerExit(Collider col){ DetectPlayer(col, false); }   // Karakterin colliderdan çikmasi
 
     #region Functions
 
-    void DetectPlayer(Collider col)
+    public void DetectPlayer(Collider col, bool enterExit)
     {
         if (col.CompareTag("Player"))
         {
-            isNearPlayer = true;
+            isNearPlayer = enterExit;
         }
     }
 
@@ -57,46 +56,15 @@ public class General_Script : MonoBehaviour
 
     void InteractPlayer()
     {
-        if (interact && controller.isInteractPressed)
+        if (isNearPlayer && gameManager.controller.isInteractPressed && !interacting)
         {
-            talkCanvas.gameObject.SetActive(false);
-            controller.movementActionMap.Enable();
+            interacting = true;
         }
-
-        if (isNearPlayer && controller.isInteractPressed)
+        else if (interacting && gameManager.controller.isInteractPressed)
         {
-            controller.player.isInteracting = true;
-            interact = true;
-
-            SetInteract();
+            interacting = false;
+            firstMeeting = false;
         }
-    }
-
-    /*-------------------------------*/
-
-    void SetInteract()
-    {
-        if (!firstMeeting)
-        {
-            FirstMeeting();
-        }
-        
-        else if (firstMeeting)
-        {
-            Debug.Log("Zaten konuştun");
-        }
-        
-    }
-
-    /*-------------------------------*/
-
-    void FirstMeeting()
-    {
-        controller.movementActionMap.Disable();
-
-        talkCanvas.gameObject.SetActive(true);
-        dialogue.text = dialogues[0];
-        firstMeeting = true;
     }
 
     /*-------------------------------*/
@@ -104,7 +72,7 @@ public class General_Script : MonoBehaviour
 
     void AnimatorAssign()
     {
-        animator.SetBool("Talking", interact);
+        animator.SetBool("Talking", interacting);
     }
 
     #endregion

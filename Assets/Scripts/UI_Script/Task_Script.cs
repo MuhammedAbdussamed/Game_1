@@ -5,45 +5,52 @@ using Microsoft.Unity.VisualStudio.Editor;
 using TMPro;
 using UnityEngine;
 using System.Threading.Tasks;
+using UnityEngine.SceneManagement;
 
 public class Task_Script : MonoBehaviour
 {
-    [Header("Scripts")]
-    [SerializeField] private General_Script generalScript;
-    [SerializeField] private Portal portalScript;
+    // Scripts
+    private GameManager gameManager;
 
-    [Header("UI_Objects")]
-    [SerializeField] private Canvas taskCanvas;
-    [SerializeField] private Toggle taskToggle;
-    [SerializeField] private TextMeshProUGUI taskText;
-    
     // Task List
-    [SerializeField] private List<String> tasks = new List<String>();
+    [SerializeField] internal List<String> tasks = new List<String>();
+
+    // Variables
+    internal String currentTask;
+    internal float currentTaskIndex;
+
+    // Mission Flag
+    internal bool isPortalFound;
+    internal bool duringMission;
+
+    void Start()
+    {
+        gameManager = GameManager.Instance;
+    }
 
     void Update()
     {
         SetTask();
+        FinishTask();
     }
 
     async void SetTask()
     {
-        if (generalScript.firstMeeting)
+        if (!gameManager.generalScript.firstMeeting)
         {
-            taskCanvas.gameObject.SetActive(true);
-            taskText.text = tasks[0];
-        }
-
-        if (generalScript.firstMeeting && portalScript.isCharacterIn)
-        {
-            taskToggle.isOn = true;
-
-            ColorBlock cb = taskToggle.colors;
-            cb.normalColor = Color.green;
-            taskToggle.colors = cb;
-
-            await Task.Delay(2000);
-
-            taskCanvas.gameObject.SetActive(false);
+            currentTask = tasks[0];
+            currentTaskIndex = 0;
+            duringMission = true;
         }
     }
+
+    void FinishTask()
+    {
+        if (currentTaskIndex == 0 && isPortalFound)
+        {
+            duringMission = false;
+        }
+    }
+
+
 }
